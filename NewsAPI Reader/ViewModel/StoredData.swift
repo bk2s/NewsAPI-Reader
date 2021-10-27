@@ -73,3 +73,8 @@ struct Countries {
     var id: String
     var countryName: String
 }
+
+struct SelectedSources {
+    var sourceName: String
+    var isSelected: Bool
+}

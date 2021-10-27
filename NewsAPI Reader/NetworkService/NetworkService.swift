@@ -11,7 +11,10 @@ import SwiftUI
 
 public class NR {
     
+    static var mainModel = MainViewModel()
+
     static func generateSources(url: String, urlParams: [String: String], complition: @escaping(_ success: Bool) -> Void) {
+        Settings.selectedSources = []
         var sources: [String] = []
         AF.request(url, method: .get, parameters: urlParams).validate().response { (responce) in
             guard let data = responce.data else {return}
@@ -24,9 +27,12 @@ public class NR {
                 if decoded.count != 0 {
                     for num in 0...decoded.count-1 {
                         sources.append(decoded[num].id!)
+                        Settings.selectedSources.append(SelectedSources(sourceName: decoded[num].id!, isSelected: true))
                         //sources += decoded[num].id! + ", "
                     }
-                    Settings.sources = sources
+                    self.mainModel.updateSources()
+                    //Settings.sources = sources
+                    print("Вот все источники собранные в одном месте: \(Settings.selectedSources)")
                     complition(true)
                 } else {
                     print("Источники пусты")

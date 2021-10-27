@@ -12,7 +12,6 @@ class SettingsViewController: UIViewController, UIPickerViewDelegate, UIPickerVi
     
 
     private var mainModel = MainViewModel()
-    private var mainView = MainTableViewController()
     private var selectedSource = ""
 
     @IBOutlet weak var countryPicker: UIPickerView!
@@ -48,14 +47,6 @@ class SettingsViewController: UIViewController, UIPickerViewDelegate, UIPickerVi
             tableView.isHidden = true
             filterPicker.isHidden = false
         default :
-            
-            NR.generateSources(url: mainModel.urlSources, urlParams: mainModel.urlParams) { success in
-                if success {
-                    self.tableView.reloadData()
-
-                }
-            }
-            
             tableView.isHidden = false
             filterPicker.isHidden = true
         }
@@ -108,18 +99,18 @@ class SettingsViewController: UIViewController, UIPickerViewDelegate, UIPickerVi
         
         if pickerView == countryPicker {
             self.filterPicker.reloadAllComponents()
-
+            Settings.needToUpdateSources = true
+            
         flagImage.image = UIImage(named: SData.countries[row].id)
         Settings.selectedCountry = row
-        Settings.needToLoad = true
+        UserDefaults.standard.set(row, forKey: "selectedCountry")
+            print("ВЫБРАНО \(Settings.selectedCountry)")
 
-                //self.mainModel.getSourses()
+        Settings.needToLoad = true
             
             NR.generateSources(url: mainModel.urlSources, urlParams: mainModel.urlParams) { success in
                 if success {
                     self.tableView.reloadData()
-                    
-
                 }
             }
             
@@ -132,11 +123,10 @@ class SettingsViewController: UIViewController, UIPickerViewDelegate, UIPickerVi
             
         print(Settings.selectedCountry)
         } else {
-                Settings.selectedCategory = row
+            Settings.selectedCategory = row
+            UserDefaults.standard.set(row, forKey: "selectedCategory")
                 Settings.needToLoad = true
                 print("Выбрана другая категория")
-                //selectedSource = Settings.sources[row]
-                //print(selectedSource)
             }
         }
     
@@ -144,10 +134,10 @@ class SettingsViewController: UIViewController, UIPickerViewDelegate, UIPickerVi
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         if Settings.sources.isEmpty {
-            return 1
+            return 0
         }
         
-        return Settings.sources.count
+        return Settings.selectedSources.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -155,16 +145,23 @@ class SettingsViewController: UIViewController, UIPickerViewDelegate, UIPickerVi
         
         if Settings.sources != [] {
         
-        cell.textLabel?.text = Settings.sources[indexPath.row]
+            cell.textLabel?.text = Settings.selectedSources[indexPath.row].sourceName
+            
+            cell.accessoryType = Settings.selectedSources[indexPath.row].isSelected ?? true ? .checkmark : .none
+            
         }
-//        if Settings.sources.count > 1 {
-//            data = Settings.sources[row]
-//            } else {
-//                data = ""
-//            }
-        
-        
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if Settings.selectedSources[indexPath.row].isSelected == false {
+            tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
+        } else {
+            tableView.cellForRow(at: indexPath)?.accessoryType = .none
+        }
+        Settings.selectedSources[indexPath.row].isSelected.toggle()
+        mainModel.updateSources()
+        Settings.needToLoad = true
     }
     
     

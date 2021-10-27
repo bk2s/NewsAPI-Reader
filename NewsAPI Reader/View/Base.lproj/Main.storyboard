@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19162" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="86j-Su-aGK">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19455" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="86j-Su-aGK">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19144"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19454"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -54,13 +54,18 @@
                                     <segue destination="JFr-nj-Gz2" kind="show" identifier="showSettings" id="eqQ-uX-3VA"/>
                                 </connections>
                             </barButtonItem>
-                            <barButtonItem title="Item" image="star" catalog="system" id="Fih-VN-2U2"/>
+                            <barButtonItem title="Item" image="star" catalog="system" id="Fih-VN-2U2">
+                                <connections>
+                                    <action selector="showStars:" destination="w4Q-2h-6bN" id="zmK-lT-GAL"/>
+                                </connections>
+                            </barButtonItem>
                         </rightBarButtonItems>
                     </navigationItem>
                     <connections>
                         <outlet property="loadingProgress" destination="VMu-Zc-2rl" id="XJS-1U-nbg"/>
                         <outlet property="searchBar" destination="RRv-i3-fUG" id="Ffp-8N-KLi"/>
                         <outlet property="sortButton" destination="t9T-kj-41c" id="zaB-wf-6BQ"/>
+                        <outlet property="star" destination="Fih-VN-2U2" id="w3I-3l-9PM"/>
                         <segue destination="5B4-Yg-NfS" kind="show" identifier="loadPage" id="uB5-3x-EL4"/>
                     </connections>
                 </tableViewController>
@@ -94,9 +99,14 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="icb-PL-EcL">
-                        <barButtonItem key="rightBarButtonItem" title="Star" image="star" catalog="system" id="zzP-uk-Wyf"/>
+                        <barButtonItem key="rightBarButtonItem" title="Star" image="star" catalog="system" id="zzP-uk-Wyf">
+                            <connections>
+                                <action selector="saveItem:" destination="5B4-Yg-NfS" id="H8b-NG-a0Z"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="starButton" destination="zzP-uk-Wyf" id="3LB-w3-OY6"/>
                         <outlet property="webPage" destination="hWM-XK-Zt6" id="jc8-vf-OWq"/>
                     </connections>
                 </viewController>
@@ -107,7 +117,6 @@
         <!--Settings-->
         <scene sceneID="QV3-jC-qcz">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="zct-GG-Ki1" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <viewController title="Settings" id="JFr-nj-Gz2" customClass="SettingsViewController" customModule="NewsAPI_Reader" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Qes-Lk-MgE">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
@@ -165,11 +174,11 @@
                                 <rect key="frame" x="20" y="416" width="374" height="426"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" id="8Nt-TK-0En" customClass="SourcesViewCell" customModule="NewsAPI_Reader" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" accessoryType="checkmark" indentationWidth="10" reuseIdentifier="Cell" id="8Nt-TK-0En" customClass="SourcesViewCell" customModule="NewsAPI_Reader" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="44.5" width="374" height="43.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="8Nt-TK-0En" id="Hyc-K8-TlC">
-                                            <rect key="frame" x="0.0" y="0.0" width="374" height="43.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="333.5" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -211,6 +220,7 @@
                         <outlet property="tableView" destination="xiu-ab-15H" id="UIy-zD-akR"/>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="zct-GG-Ki1" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2105.7971014492755" y="-206.25"/>
         </scene>

@@ -11,11 +11,14 @@ class PageViewController: UIViewController {
     
     public var newsData: Article?
     
+    @IBOutlet weak var starButton: UIBarButtonItem!
     @IBOutlet weak var webPage: UIWebView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        RealmController.loadItems()
 
+        print(RealmController.savedNews)
         title = newsData?.title ?? ""
         
         guard let urlString = newsData?.url else { return }
@@ -25,12 +28,49 @@ class PageViewController: UIViewController {
         webPage.loadRequest(request)
 
         
+        if let saved = RealmController.savedNews {
         
+            if saved.count > 0 {
+            
+        for des in 0...saved.count - 1 {
+            if RealmController.savedNews![des].descriptionRealm == newsData?.description {
+                starButton.image = UIImage(systemName: "star.fill")
+                //starButton.isEnabled = false
+            }
+        }
+        }
+        }
         
         
         // Do any additional setup after loading the view.
     }
     
+    @IBAction func saveItem(_ sender: UIBarButtonItem) {
+        
+        if starButton.image == UIImage(systemName: "star.fill") {
+            print("Удаляю запись")
+            if let saved = RealmController.savedNews {
+                var itemNum = 0
+            for des in 0...saved.count - 1 {
+                if RealmController.savedNews![des].descriptionRealm == newsData?.description {
+                    RealmController.deleteItem(num: itemNum)
+                    starButton.image = UIImage(systemName: "star")
+                    //starButton.isEnabled = false
+                }
+                itemNum += 1
 
+            }
+            }
+
+        } else {
+        
+
+        RealmController.saveToRealm(sourceName: newsData?.source?.name ?? "", url: newsData?.url ?? "", title: newsData?.title ?? "", author: newsData?.author ?? "", descr: newsData?.description ?? "", image: (newsData?.image!)! )
+        
+
+        
+        starButton.image = UIImage(systemName: "star.fill")
+    }
+    }
     
 }

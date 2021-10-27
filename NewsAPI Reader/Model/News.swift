@@ -24,6 +24,7 @@ struct Article : Codable {
     let urlToImage : String?
     var image : Data?
     var saved : Bool?
+    var isStarred: Bool?
 }
 
 struct SourceFrom : Codable {

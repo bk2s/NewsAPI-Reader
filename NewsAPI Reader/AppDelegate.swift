@@ -7,15 +7,28 @@
 
 import UIKit
 import CoreData
+import RealmSwift
 
-@available(iOS 13.0, *)
+//@available(iOS 13.0, *)
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        
+        let defaults = UserDefaults.standard
+        if defaults.value(forKey: "selectedCategory") == nil{
+            defaults.set(0, forKey: "selectedCategory")
+            defaults.set(51, forKey: "selectedCountry")
+        }
+        
+        do {
+            _ = try Realm()
+        } catch {
+            print(error)
+        }
+        
         return true
     }
 

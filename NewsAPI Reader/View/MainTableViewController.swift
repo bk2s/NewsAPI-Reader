@@ -6,52 +6,54 @@
 //
 
 import UIKit
+import RealmSwift
 
 class MainTableViewController: UITableViewController {
     
     private var mainModel = MainViewModel()
-    private var newsData: [Article] = []
-    private var totalItems = 0
-    private var loadAfter = 18
-    private var isSorted = true
-    private var selected = 0
+    
     @IBOutlet weak var loadingProgress: UIProgressView!
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var sortButton: UIBarButtonItem!
+    @IBOutlet weak var star: UIBarButtonItem!
+    
+    var showStarred: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.mainModel.getSourses()
+        print(Settings.selectedCategory)
+        mainModel.getSourses()
         sortButton.isEnabled = false
-
+        print(Realm.Configuration.defaultConfiguration.fileURL!)
+        RealmController.loadItems()
+    }
+    
+    fileprivate func loadNews() {
+        self.mainModel.loadNews { newsData in
+            self.sortButton.isEnabled = false
+            self.loadingProgress.isHidden = false
+            self.loadingProgress.progress = self.mainModel.progress
+            self.mainModel.newsData.append(newsData)
+            print("Page updated")
+            self.tableView.reloadData()
+            
+            if Double(self.mainModel.newsData.count) >= Double(self.mainModel.loadedItems - 2) {
+                self.loadingProgress.isHidden = true
+                self.sortButton.isEnabled = true
+            }
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
         
         if Settings.needToLoad {
-        
-        newsData = []
-        tableView.reloadData()
-        mainModel.page = 1
-        loadingProgress.isHidden = true
-        tableView.register(UINib(nibName: "NewsCell", bundle: nil) , forCellReuseIdentifier: "Cell")
+            loadNews()
+            
+            tableView.reloadData()
+            loadingProgress.isHidden = true
+            tableView.register(UINib(nibName: "NewsCell", bundle: nil) , forCellReuseIdentifier: "Cell")
+            
 
-        self.mainModel.loadNews { newsData in
-            
-            // Progress View ------------------------------------------------
-            self.sortButton.isEnabled = false
-            self.loadingProgress.isHidden = false
-            self.loadingProgress.progress = Float(Double(self.newsData.count) / Double(self.mainModel.loadedItems))
-            self.newsData.append(newsData)
-            
-            print("Page updated")
-            self.tableView.reloadData()
-            
-            if Double(self.newsData.count) >= Double(self.loadAfter - 2) {
-                self.loadingProgress.isHidden = true
-                self.sortButton.isEnabled = true
-            }
-        }
         }
         Settings.needToLoad.toggle()
     }
@@ -59,22 +61,48 @@ class MainTableViewController: UITableViewController {
     
     @IBAction func sortPressed(_ sender: UIBarButtonItem) {
         
-        if isSorted {
-        newsData = newsData.sorted(by: { $0.publishedAt! < $1.publishedAt! })
+        if Settings.isSorted {
+            mainModel.newsData = mainModel.newsData.sorted(by: { $0.publishedAt! < $1.publishedAt! })
         tableView.reloadData()
-            isSorted.toggle()
+            Settings.isSorted.toggle()
         } else {
-            newsData = newsData.sorted(by: { $0.publishedAt! > $1.publishedAt! })
+            mainModel.newsData = mainModel.newsData.sorted(by: { $0.publishedAt! > $1.publishedAt! })
             tableView.reloadData()
-            isSorted.toggle()
+            Settings.isSorted.toggle()
         }
         
     }
     
     
     
+    @IBAction func showStars(_ sender: UIBarButtonItem) {
+        
+        showStarred.toggle()
+
+        if showStarred {
+            star.image = UIImage(systemName: "star.fill")
+            tableView.reloadData()
+            
+        } else {
+            star.image = UIImage(systemName: "star")
+            loadNews()
+        }
+
+        
+    }
+    
+    
+    
+    
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return newsData.count
+        
+        if showStarred {
+            return RealmController.savedNews?.count ?? 0
+        } else {
+        
+        return mainModel.newsData.count
+        }
     }
     
     
@@ -83,7 +111,18 @@ class MainTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         print("Cell number \(indexPath.row) is loaded")
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! NewsTableViewCell
-        let loadedData = newsData[indexPath.row]
+        
+        if showStarred {
+            let savedData = RealmController.savedNews?[indexPath.row]
+            cell.authorLabel.text = savedData?.author
+            cell.descriptionLabel.text = savedData?.descriptionRealm
+            cell.sourceNameLabel.text = savedData?.sourceName
+            cell.titleLabel.text = savedData?.title
+            cell.imagePreviewLabel.image = UIImage(data: savedData!.image!)
+            
+        } else {
+        
+        let loadedData = mainModel.newsData[indexPath.row]
         cell.authorLabel.text = loadedData.author
         
         cell.descriptionLabel.text = loadedData.description
@@ -93,15 +132,16 @@ class MainTableViewController: UITableViewController {
         if let imageData = loadedData.image {
             cell.imagePreviewLabel.image = UIImage(data: imageData)
         }
+        }
         return cell
     }
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         
-        if indexPath.row == loadAfter {
+        if indexPath.row == Settings.loadAfter {
             print("Load new data")
-            loadAfter += 18
-            print(loadAfter)
+            Settings.loadAfter += 18
+            print(Settings.loadAfter)
             mainModel.loadMore { loadedData in
                 
                 
@@ -109,10 +149,12 @@ class MainTableViewController: UITableViewController {
                 self.loadingProgress.isHidden = false
                 self.sortButton.isEnabled = false
                 if loadedData.title != nil {
-                    self.newsData.append(loadedData)
-                    self.loadingProgress.progress = Float((Double(self.newsData.count - self.mainModel.loadedItems)  / Double( self.mainModel.loadedItems)) / Double(self.mainModel.page - 1))
+                    self.mainModel.newsData.append(loadedData)
+                    self.loadingProgress.progress = self.mainModel.progress
                     self.tableView.reloadData()
-                    if Float((Double(self.newsData.count - self.mainModel.loadedItems)  / Double( self.mainModel.loadedItems)) / Double(self.mainModel.page - 1)) >= 0.95 {
+                    if Float((Double(self.mainModel.newsData.count - self.mainModel.loadedItems)  / Double( self.mainModel.loadedItems)) / Double(self.mainModel.page - 1)) >= 0.95 {
+//                        if Double(self.mainModel.newsData.count) >= Double(self.mainModel.loadedItems - 2) {
+
                         self.loadingProgress.isHidden = true
                         self.sortButton.isEnabled = true
 
@@ -123,7 +165,7 @@ class MainTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        selected = indexPath.row
+        Settings.selected = indexPath.row
         performSegue(withIdentifier: "loadPage", sender: nil)
     }
     
@@ -132,8 +174,12 @@ class MainTableViewController: UITableViewController {
         if segue.identifier == "loadPage" {
             let pageVC = segue.destination as! PageViewController
             
-            pageVC.newsData = newsData[selected]
-                
+            if showStarred {
+                //pageVC.isSaved = true
+                //pageVC.savedData = RealmController.savedNews?[Settings.selected]
+            } else {
+            pageVC.newsData = mainModel.newsData[Settings.selected]
+            }
             
         }
     }

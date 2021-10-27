@@ -3,10 +3,14 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 53;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0238F1782729B04800DA4C67 /* ArticleRealm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0238F1772729B04800DA4C67 /* ArticleRealm.swift */; };
+		0238F17A2729B20F00DA4C67 /* Realm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0238F1792729B20F00DA4C67 /* Realm.swift */; };
+		0238F1832729BFF000DA4C67 /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = 0238F1822729BFF000DA4C67 /* Realm */; };
+		0238F1852729BFF000DA4C67 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 0238F1842729BFF000DA4C67 /* RealmSwift */; };
 		023CB39C2725796100A2930F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 023CB39B2725796100A2930F /* AppDelegate.swift */; };
 		023CB39E2725796100A2930F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 023CB39D2725796100A2930F /* SceneDelegate.swift */; };
 		023CB3A32725796100A2930F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 023CB3A12725796100A2930F /* Main.storyboard */; };
@@ -15,8 +19,6 @@
 		023CB3AB2725796300A2930F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 023CB3A92725796300A2930F /* LaunchScreen.storyboard */; };
 		023CB3B3272579F000A2930F /* MainTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 023CB3B2272579F000A2930F /* MainTableViewController.swift */; };
 		023CB3B627257A5E00A2930F /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 023CB3B527257A5E00A2930F /* Alamofire */; };
-		023CB3B927257C0400A2930F /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = 023CB3B827257C0400A2930F /* Realm */; };
-		023CB3BB27257C0400A2930F /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 023CB3BA27257C0400A2930F /* RealmSwift */; };
 		023CB3BE2725938800A2930F /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 023CB3BD2725938800A2930F /* NetworkService.swift */; };
 		023CB3C1272594A200A2930F /* Sources.swift in Sources */ = {isa = PBXBuildFile; fileRef = 023CB3C0272594A200A2930F /* Sources.swift */; };
 		023CB3C32725959900A2930F /* News.swift in Sources */ = {isa = PBXBuildFile; fileRef = 023CB3C22725959900A2930F /* News.swift */; };
@@ -30,6 +32,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0238F1772729B04800DA4C67 /* ArticleRealm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticleRealm.swift; sourceTree = "<group>"; };
+		0238F1792729B20F00DA4C67 /* Realm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Realm.swift; sourceTree = "<group>"; };
 		023CB3982725796100A2930F /* NewsAPI Reader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "NewsAPI Reader.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		023CB39B2725796100A2930F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		023CB39D2725796100A2930F /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -56,8 +60,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				023CB3BB27257C0400A2930F /* RealmSwift in Frameworks */,
-				023CB3B927257C0400A2930F /* Realm in Frameworks */,
+				0238F1852729BFF000DA4C67 /* RealmSwift in Frameworks */,
+				0238F1832729BFF000DA4C67 /* Realm in Frameworks */,
 				023CB3B627257A5E00A2930F /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -65,11 +69,27 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0238F17B2729B31D00DA4C67 /* Realm */ = {
+			isa = PBXGroup;
+			children = (
+				0238F1792729B20F00DA4C67 /* Realm.swift */,
+			);
+			path = Realm;
+			sourceTree = "<group>";
+		};
+		0238F17C2729B86E00DA4C67 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		023CB38F2725796100A2930F = {
 			isa = PBXGroup;
 			children = (
 				023CB39A2725796100A2930F /* NewsAPI Reader */,
 				023CB3992725796100A2930F /* Products */,
+				0238F17C2729B86E00DA4C67 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -111,6 +131,7 @@
 			children = (
 				023CB3C0272594A200A2930F /* Sources.swift */,
 				023CB3C22725959900A2930F /* News.swift */,
+				0238F1772729B04800DA4C67 /* ArticleRealm.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -134,6 +155,7 @@
 			children = (
 				023CB3C52725A51200A2930F /* MainViewModel.swift */,
 				023CB3C82725BCC800A2930F /* StoredData.swift */,
+				0238F17B2729B31D00DA4C67 /* Realm */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -156,8 +178,8 @@
 			name = "NewsAPI Reader";
 			packageProductDependencies = (
 				023CB3B527257A5E00A2930F /* Alamofire */,
-				023CB3B827257C0400A2930F /* Realm */,
-				023CB3BA27257C0400A2930F /* RealmSwift */,
+				0238F1822729BFF000DA4C67 /* Realm */,
+				0238F1842729BFF000DA4C67 /* RealmSwift */,
 			);
 			productName = "NewsAPI Reader";
 			productReference = 023CB3982725796100A2930F /* NewsAPI Reader.app */;
@@ -179,7 +201,7 @@
 				};
 			};
 			buildConfigurationList = 023CB3932725796100A2930F /* Build configuration list for PBXProject "NewsAPI Reader" */;
-			compatibilityVersion = "Xcode 11.0";
+			compatibilityVersion = "Xcode 12.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -189,7 +211,7 @@
 			mainGroup = 023CB38F2725796100A2930F;
 			packageReferences = (
 				023CB3B427257A5E00A2930F /* XCRemoteSwiftPackageReference "Alamofire" */,
-				023CB3B727257C0400A2930F /* XCRemoteSwiftPackageReference "realm-cocoa" */,
+				0238F1812729BFF000DA4C67 /* XCRemoteSwiftPackageReference "realm-cocoa" */,
 			);
 			productRefGroup = 023CB3992725796100A2930F /* Products */;
 			projectDirPath = "";
@@ -224,6 +246,7 @@
 				023CB3CF2726D3AB00A2930F /* SettingsViewController.swift in Sources */,
 				023CB3D127271CE400A2930F /* SourcesViewCell.swift in Sources */,
 				023CB3CD2725CFC400A2930F /* NewsTableViewCell.swift in Sources */,
+				0238F17A2729B20F00DA4C67 /* Realm.swift in Sources */,
 				023CB3BE2725938800A2930F /* NetworkService.swift in Sources */,
 				023CB3B3272579F000A2930F /* MainTableViewController.swift in Sources */,
 				023CB3A62725796100A2930F /* NewsAPI_Reader.xcdatamodeld in Sources */,
@@ -231,6 +254,7 @@
 				023CB39C2725796100A2930F /* AppDelegate.swift in Sources */,
 				023CB3D32727369700A2930F /* PageViewController.swift in Sources */,
 				023CB39E2725796100A2930F /* SceneDelegate.swift in Sources */,
+				0238F1782729B04800DA4C67 /* ArticleRealm.swift in Sources */,
 				023CB3C62725A51200A2930F /* MainViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -308,7 +332,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -363,7 +387,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -389,7 +413,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -419,7 +443,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -457,6 +481,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		0238F1812729BFF000DA4C67 /* XCRemoteSwiftPackageReference "realm-cocoa" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/realm/realm-cocoa.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 		023CB3B427257A5E00A2930F /* XCRemoteSwiftPackageReference "Alamofire" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
@@ -465,31 +497,23 @@
 				minimumVersion = 5.0.0;
 			};
 		};
-		023CB3B727257C0400A2930F /* XCRemoteSwiftPackageReference "realm-cocoa" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/realm/realm-cocoa.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 5.0.0;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		0238F1822729BFF000DA4C67 /* Realm */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0238F1812729BFF000DA4C67 /* XCRemoteSwiftPackageReference "realm-cocoa" */;
+			productName = Realm;
+		};
+		0238F1842729BFF000DA4C67 /* RealmSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0238F1812729BFF000DA4C67 /* XCRemoteSwiftPackageReference "realm-cocoa" */;
+			productName = RealmSwift;
+		};
 		023CB3B527257A5E00A2930F /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 023CB3B427257A5E00A2930F /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
-		};
-		023CB3B827257C0400A2930F /* Realm */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 023CB3B727257C0400A2930F /* XCRemoteSwiftPackageReference "realm-cocoa" */;
-			productName = Realm;
-		};
-		023CB3BA27257C0400A2930F /* RealmSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 023CB3B727257C0400A2930F /* XCRemoteSwiftPackageReference "realm-cocoa" */;
-			productName = RealmSwift;
 		};
 /* End XCSwiftPackageProductDependency section */
 
