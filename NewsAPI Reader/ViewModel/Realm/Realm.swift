@@ -10,11 +10,8 @@ import RealmSwift
 
 class RealmController {
     
-   static let realm = try! Realm()
-
+    static let realm = try! Realm()
     static var savedNews: Results<ArticleRealm>?
-    
-    
     static func saveItems(news: ArticleRealm) {
         do {
             try! realm.write{
@@ -25,11 +22,13 @@ class RealmController {
         }
     }
     
-   static func loadItems() {
+    
+    static func loadItems() {
         savedNews = realm.objects(ArticleRealm.self)
     }
     
-   static func saveToRealm(sourceName: String, url: String, title: String, author: String, descr: String, image: Data) {
+    
+    static func saveToRealm(sourceName: String, url: String, title: String, author: String, descr: String, image: Data) {
         var newItem = ArticleRealm()
         newItem.sourceName = sourceName
         newItem.url = url
@@ -37,12 +36,12 @@ class RealmController {
         newItem.author = author
         newItem.descriptionRealm = descr
         newItem.image = image
-       newItem.isStarred = true
+        newItem.isStarred = true
         saveItems(news: newItem)
     }
     
+    
     static func deleteItem(num: Int) {
-        
         if let item = savedNews?[num] {
             do {
                 try self.realm.write {
@@ -52,10 +51,5 @@ class RealmController {
                 print(error)
             }
         }
-        
     }
-    
-    
-    
-    
 }

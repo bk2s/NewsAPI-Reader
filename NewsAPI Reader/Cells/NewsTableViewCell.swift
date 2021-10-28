@@ -6,8 +6,9 @@
 //
 
 import UIKit
+import SwipeCellKit
 
-class NewsTableViewCell: UITableViewCell {
+class NewsTableViewCell: SwipeTableViewCell {
 
     
     @IBOutlet weak var titleLabel: UILabel!

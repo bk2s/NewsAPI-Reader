@@ -7,10 +7,10 @@
 
 import Foundation
 
-
-struct Settings {
+public struct Settings {
     static var selectedCountry = UserDefaults.standard.integer(forKey: "selectedCountry")
     static var selectedCategory = UserDefaults.standard.integer(forKey: "selectedCategory")
+    static var filteringBy = UserDefaults.standard.integer(forKey: "filteringBy")
     static var sources: [String] = []
     static var selectedSources: [SelectedSources] = []
     static var needToLoad = true
@@ -27,7 +27,7 @@ class MainViewModel {
     public var progress: Float = 0
     public var loadedItems = 0
     public var totalResults = 0
-    private var api = "26a7599818a14a579d6ab69fa5adddf1"
+    private var api = "6c23cc88aeef4748a94c235afc921639"
     public var urlParams: [String : String] {
         let params = [
             "apiKey":api,
@@ -61,7 +61,6 @@ class MainViewModel {
     
     public let urlSources = "https://newsapi.org/v2/top-headlines/sources"
     private let urlNews = "https://newsapi.org/v2/top-headlines"
-    //public var newsData: News!
     
     
     func loadNews(complition: @escaping (_ newsData: Article)->()) {
@@ -71,22 +70,23 @@ class MainViewModel {
         DispatchQueue.global().async {
             NR.loadNews(url: self.urlNews, urlParams: self.urlParamsNews) { newsData in
                 var newData = newsData
-                //self.totalResults = newData.totalResults ?? 0
                 self.loadedItems = newData.articles?.count ?? 0
-                print("Вот что получилось выудить")
+                print("All downloaded data")
                 print(newData)
                 DispatchQueue.global().async {
-                    for img in 0...newData.articles!.count-1 {
-                        if let url = URL(string: newData.articles?[img].urlToImage ?? "") {
-                            if let data = try? Data(contentsOf: url) {
-                                newData.articles?[img].image = data
-                            }
-                            DispatchQueue.main.async {
-                                self.totalResults += 1
-                                self.progress = Float(Double(self.totalResults) / Double(self.loadedItems))
-                                print("progress is: \(self.progress)")
-                                complition((newData.articles?[img])!)
-                                print("Picture № \(img) downloaded to model")
+                    if newData.articles?.count != 0 {
+                        for img in 0...newData.articles!.count-1 {
+                            if let url = URL(string: newData.articles?[img].urlToImage ?? "") {
+                                if let data = try? Data(contentsOf: url) {
+                                    newData.articles?[img].image = data
+                                }
+                                DispatchQueue.main.async {
+                                    self.totalResults += 1
+                                    self.progress = Float(Double(self.totalResults) / Double(self.loadedItems))
+                                    print("progress is: \(self.progress)")
+                                    complition((newData.articles?[img])!)
+                                    print("Picture № \(img) downloaded to model")
+                                }
                             }
                         }
                     }
@@ -97,9 +97,9 @@ class MainViewModel {
     
     func getSourses() {
         if Settings.needToUpdateSources {
-        NR.generateSources(url: self.urlSources, urlParams: self.urlParams) { success in
-            //
-        }
+            NR.generateSources(url: self.urlSources, urlParams: self.urlParams) { success in
+                //
+            }
         }
         Settings.needToUpdateSources = false
     }
@@ -112,7 +112,7 @@ class MainViewModel {
         NR.loadNews(url: self.urlNews, urlParams: self.urlParamsNews) { newsData in
             var loadedData = newsData
             self.loadedItems = loadedData.articles?.count ?? 0
-            print("Вот сколько объектов еще удалось вытащить: \(loadedData.articles?.count)")
+            print("How many objects downloaded: \(loadedData.articles?.count)")
             DispatchQueue.global().async {
                 if self.loadedItems != 0 {
                     if let count = loadedData.articles?.count {
@@ -135,8 +135,6 @@ class MainViewModel {
     }
     
     
-    
-    
     func updateSources() {
         if Settings.needToUpdateSources {
             Settings.sources = []
@@ -148,10 +146,6 @@ class MainViewModel {
         }
         Settings.needToUpdateSources = false
     }
-    
-    
-    
-    
 }
 
 

@@ -21,9 +21,12 @@
                             <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                             <textInputTraits key="textInputTraits"/>
+                            <connections>
+                                <outlet property="delegate" destination="w4Q-2h-6bN" id="Ybf-wv-wXi"/>
+                            </connections>
                         </searchBar>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleAspectFit" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" rowHeight="136" id="wfI-hj-uAE" customClass="NewsCell">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleAspectFit" preservesSuperviewLayoutMargins="YES" selectionStyle="blue" indentationWidth="10" reuseIdentifier="Cell" rowHeight="136" id="wfI-hj-uAE" customClass="NewsCell">
                                 <rect key="frame" x="0.0" y="88.5" width="414" height="136"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="wfI-hj-uAE" id="EOu-d6-HNj">
@@ -98,15 +101,8 @@
                             <constraint firstItem="hWM-XK-Zt6" firstAttribute="trailing" secondItem="euZ-O7-j08" secondAttribute="trailing" id="reO-NE-gY6"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="icb-PL-EcL">
-                        <barButtonItem key="rightBarButtonItem" title="Star" image="star" catalog="system" id="zzP-uk-Wyf">
-                            <connections>
-                                <action selector="saveItem:" destination="5B4-Yg-NfS" id="H8b-NG-a0Z"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" id="tCU-Hf-tYW"/>
                     <connections>
-                        <outlet property="starButton" destination="zzP-uk-Wyf" id="3LB-w3-OY6"/>
                         <outlet property="webPage" destination="hWM-XK-Zt6" id="jc8-vf-OWq"/>
                     </connections>
                 </viewController>

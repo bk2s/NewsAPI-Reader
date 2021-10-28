@@ -8,12 +8,10 @@
 import UIKit
 
 class SettingsViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource, UITableViewDelegate, UITableViewDataSource {
-
     
-
     private var mainModel = MainViewModel()
     private var selectedSource = ""
-
+    
     @IBOutlet weak var countryPicker: UIPickerView!
     @IBOutlet weak var flagImage: UIImageView!
     @IBOutlet weak var filterPicker: UIPickerView!
@@ -31,12 +29,28 @@ class SettingsViewController: UIViewController, UIPickerViewDelegate, UIPickerVi
         tableView.dataSource = self
         countryPicker.selectRow(Settings.selectedCountry, inComponent: 0, animated: true)
         filterPicker.selectRow(Settings.selectedCategory, inComponent: 0, animated: true)
-        
+        selected.selectedSegmentIndex = Settings.filteringBy
+        showAndHide()
+        flagImage.image = UIImage(named: SData.countries[Settings.selectedCountry].id)
         self.navigationItem.hidesBackButton = true
         let newBackButton = UIBarButtonItem(title: "< Back", style: UIBarButtonItem.Style.plain, target: self, action: #selector(SettingsViewController.back(sender:)))
         self.navigationItem.leftBarButtonItem = newBackButton
-        
-        
+        NR.generateSources(url: mainModel.urlSources, urlParams: mainModel.urlParams) { success in
+            if success {
+                self.tableView.reloadData()
+            }
+        }
+    }
+    
+    func showAndHide() {
+        if selected.selectedSegmentIndex == 0 {
+            tableView.isHidden = true
+            filterPicker.isHidden = false
+        } else {
+            Settings.selectedSources = []
+            tableView.isHidden = false
+            filterPicker.isHidden = true
+        }
     }
     
     @IBAction func categorySelected(_ sender: UISegmentedControl) {
@@ -44,9 +58,19 @@ class SettingsViewController: UIViewController, UIPickerViewDelegate, UIPickerVi
         filterPicker.reloadAllComponents()
         switch sender.selectedSegmentIndex {
         case 0 :
+            Settings.filteringBy = 0
+            UserDefaults.standard.set(0, forKey: "filteringBy")
             tableView.isHidden = true
             filterPicker.isHidden = false
         default :
+            Settings.filteringBy = 1
+            Settings.selectedSources = []
+            NR.generateSources(url: mainModel.urlSources, urlParams: mainModel.urlParams) { success in
+                if success {
+                    self.tableView.reloadData()
+                }
+            }
+            UserDefaults.standard.set(1, forKey: "filteringBy")
             tableView.isHidden = false
             filterPicker.isHidden = true
         }
@@ -54,25 +78,25 @@ class SettingsViewController: UIViewController, UIPickerViewDelegate, UIPickerVi
     
     
     @objc func back(sender: UIBarButtonItem) {
-        print("Время рамсить!")
-            
+        print("Time to go back!")
         if selectedSource != "" {
-        Settings.sources = []
+            Settings.sources = []
             Settings.sources.append(selectedSource)
             print(Settings.sources)
         }
-            _ = navigationController?.popViewController(animated: true)
-        }
+        _ = navigationController?.popViewController(animated: true)
+    }
     
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        1
+       return 1
     }
+    
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         var count = 0
         if pickerView == countryPicker {
-        count = SData.countries.count
+            count = SData.countries.count
         } else {
             if selected.selectedSegmentIndex == 0 {
                 count = SData.category.count
@@ -83,56 +107,43 @@ class SettingsViewController: UIViewController, UIPickerViewDelegate, UIPickerVi
         return count
     }
     
+    
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         var data: String = ""
         if pickerView == countryPicker {
-        data = SData.countries[row].countryName
+            data = SData.countries[row].countryName
         } else {
-                data = SData.category[row]
-            
-            }
-        
+            data = SData.category[row]
+        }
         return data
     }
-
+    
+    
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        
         if pickerView == countryPicker {
             self.filterPicker.reloadAllComponents()
             Settings.needToUpdateSources = true
-            
-        flagImage.image = UIImage(named: SData.countries[row].id)
-        Settings.selectedCountry = row
-        UserDefaults.standard.set(row, forKey: "selectedCountry")
+            flagImage.image = UIImage(named: SData.countries[row].id)
+            Settings.selectedCountry = row
+            UserDefaults.standard.set(row, forKey: "selectedCountry")
             print("ВЫБРАНО \(Settings.selectedCountry)")
-
-        Settings.needToLoad = true
-            
+            Settings.needToLoad = true
             NR.generateSources(url: mainModel.urlSources, urlParams: mainModel.urlParams) { success in
                 if success {
                     self.tableView.reloadData()
                 }
             }
-            
-       
-                
-                
-            
-            
-            
-            
-        print(Settings.selectedCountry)
+            print(Settings.selectedCountry)
         } else {
             Settings.selectedCategory = row
             UserDefaults.standard.set(row, forKey: "selectedCategory")
-                Settings.needToLoad = true
-                print("Выбрана другая категория")
-            }
+            Settings.needToLoad = true
+            print("Selected category \(SData.category[Settings.selectedCategory])")
         }
+    }
     
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
         if Settings.sources.isEmpty {
             return 0
         }
@@ -140,18 +151,16 @@ class SettingsViewController: UIViewController, UIPickerViewDelegate, UIPickerVi
         return Settings.selectedSources.count
     }
     
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-        
         if Settings.sources != [] {
-        
             cell.textLabel?.text = Settings.selectedSources[indexPath.row].sourceName
-            
             cell.accessoryType = Settings.selectedSources[indexPath.row].isSelected ?? true ? .checkmark : .none
-            
         }
         return cell
     }
+    
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if Settings.selectedSources[indexPath.row].isSelected == false {

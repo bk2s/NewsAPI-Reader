@@ -21,6 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if defaults.value(forKey: "selectedCategory") == nil{
             defaults.set(0, forKey: "selectedCategory")
             defaults.set(51, forKey: "selectedCountry")
+            defaults.set(1, forKey: "filteringBy")
         }
         
         do {

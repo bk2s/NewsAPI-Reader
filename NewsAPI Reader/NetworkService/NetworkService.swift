@@ -28,14 +28,12 @@ public class NR {
                     for num in 0...decoded.count-1 {
                         sources.append(decoded[num].id!)
                         Settings.selectedSources.append(SelectedSources(sourceName: decoded[num].id!, isSelected: true))
-                        //sources += decoded[num].id! + ", "
                     }
                     self.mainModel.updateSources()
-                    //Settings.sources = sources
-                    print("Вот все источники собранные в одном месте: \(Settings.selectedSources)")
+                    print("All sources in one place: \(Settings.selectedSources)")
                     complition(true)
                 } else {
-                    print("Источники пусты")
+                    print("Sources is nil")
                     Settings.sources = []
                     complition(true)
 
@@ -50,7 +48,6 @@ public class NR {
     
     static func loadNews(url: String, urlParams: [String : String], complition: @escaping(_ newsData: News)->()) {
         AF.request(url, method: .get, parameters: urlParams).validate().responseString(encoding: .utf8) { (responce) in
-            
             guard let data = responce.data else {return}
             do {
                 let decoder = JSONDecoder()

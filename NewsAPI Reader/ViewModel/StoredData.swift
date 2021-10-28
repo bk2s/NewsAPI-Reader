@@ -62,17 +62,15 @@ public class SData {
     Countries(id: "ve", countryName: "Venezuela"),
     Countries(id: "za", countryName: "South Africa")
     ]
-    
     static var category: [String] = ["business", "entertainment", "general", "health", "science", "sports", "technology"]
-    
-    //static var sortBy: [String] = [""]
-    
 }
+
 
 struct Countries {
     var id: String
     var countryName: String
 }
+
 
 struct SelectedSources {
     var sourceName: String
