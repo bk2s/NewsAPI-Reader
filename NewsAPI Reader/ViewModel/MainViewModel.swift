@@ -117,10 +117,10 @@ class MainViewModel {
                 if self.loadedItems != 0 {
                     if let count = loadedData.articles?.count {
                         for img in 0...count-1 {
-                            if let url = URL(string: loadedData.articles![img].urlToImage ?? "") {
-                                guard let data = try? Data(contentsOf: url) else { return }
-                                loadedData.articles?[img].image = data
-                            }
+//                            if let url = URL(string: loadedData.articles![img].urlToImage ?? "") {
+//                                guard let data = try? Data(contentsOf: url) else { return }
+//                                loadedData.articles?[img].image = data
+//                            }
                             DispatchQueue.main.async {
                                 self.totalResults += 1
                                 self.progress = Float(Double(self.totalResults) / Double(self.loadedItems))
